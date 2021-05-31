@@ -2,7 +2,6 @@
 export const ModalTemplate = {
     video({title, videoId, channelTitle, publishTime}) {
         return `
-            <section class="video-wrapper">
               <article class="clip">
                 <div class="preview-container">
                   <iframe
@@ -33,7 +32,6 @@ export const ModalTemplate = {
                   </div>
                 </div>
               </article>
-            </section>
         `
     }
 }
