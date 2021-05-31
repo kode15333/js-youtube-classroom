@@ -1,6 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: "development",
@@ -13,7 +14,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.(j|t)s$/,
+        test: /.js$/,
         include: [path.resolve(__dirname, "src")],
         exclude: [path.resolve(__dirname, "node_modules")],
         loader: "babel-loader",
@@ -26,6 +27,7 @@ module.exports = {
   },
   resolve: { extensions: [".json", ".js", ".ts"] },
   plugins: [
+    new Dotenv(),
     new HtmlWebpackPlugin({ template: "./index.html" }),
     new CleanWebpackPlugin(),
   ],
