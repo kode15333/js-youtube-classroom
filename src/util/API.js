@@ -3,10 +3,11 @@ const SEARCH_URL = `https://www.googleapis.com/youtube/v3/search?key=${process.e
 const parseResponse = async response => {
   const { status, ok} = response;
   let data;
-  if(ok) {
+  if(ok && status === 200) {
     data = await response.json();
   } else {
-    throw new Error('Response Error' + status)
+    throw new Error('response Error : ' + status)
+
   }
 
   return {
@@ -36,7 +37,7 @@ const request = async params => {
     const response = await fetch(url, config);
     return parseResponse(response);
   } catch (error) {
-    console.error('Fetch Error' + error)
+    throw new Error('request Error : ' + error)
   }
 
 }
