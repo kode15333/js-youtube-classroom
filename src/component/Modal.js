@@ -4,12 +4,9 @@ import { ModalTemplate } from '../util/Template'
 
 class Modal {
   constructor ({ parent, store }) {
+    //TODO store 분리 modal and app
     this.$modal = $('.modal', parent)
     this._store = store
-    this._store.on('searchList', (prev, next) => {
-      // API 요청
-      console.log(prev, next, 111)
-    })
     this.$modalOpen = $('#search-button')
     this.$modalClose = $('.modal-close', this.$modal)
     this.$searchForm = $('form', this.$modal)
@@ -18,9 +15,14 @@ class Modal {
   }
 
   _addDomEvent = () => {
+    this.$modal.addEventListener('scroll', this._scroll)
     this.$modalOpen.addEventListener('click', this._open)
     this.$modalClose.addEventListener('click', this._close)
     this.$searchForm.addEventListener('submit', this._search)
+  }
+
+  _scroll = () => {
+    //TODO throttle 구현
   }
 
   _open = () => {
@@ -29,8 +31,6 @@ class Modal {
 
   _close = () => {
     this.$modal.classList.remove('open')
-    const { searchList } = this._store.get()
-    console.log(searchList)
   }
 
   _dateFormat = (dateString) => {
@@ -53,11 +53,16 @@ class Modal {
     }, [])
   }
 
+  _getPageList = async (searchTitle, nextPage = '') => {
+    return await search(searchTitle, nextPage)
+  }
+
   _search = async (e) => {
     e.preventDefault()
+    //TODO 함수분리
     const formData = new FormData(e.target)
     const searchTitle = formData.get('search')
-    const { nextPageToken = '', items } = await search(searchTitle)
+    const { nextPageToken = '', items } = await this._getPageList(searchTitle)
     const searchData = this._responseParser(items)
     let html = searchData.reduce((acc, videoInfo) => {
       acc += ModalTemplate.video(videoInfo)

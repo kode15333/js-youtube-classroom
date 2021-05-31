@@ -52,9 +52,10 @@ const get = async (url, headers) => {
   return response.data
 }
 
-export const search = async (serach) => {
+export const search = async (serach, nextPage = '') => {
   try {
-    return await get(SEARCH_URL + serach)
+    if(nextPage === '')
+    return await get(SEARCH_URL + serach + `&pageToken=${nextPage && nextPage}`)
   } catch (error) {
     console.error(error)
   }
